@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cyberpunk Terminal</title>
+    <style>
+        body {
+            background-color: #080B0F;
+            color: #00ff41;
+            font-family: 'Courier New', monospace;
+            text-align: center;
+            padding-top: 50px;
+        }
+        .terminal {
+            width: 80%;
+            max-width: 600px;
+            margin: auto;
+            padding: 20px;
+            border: 2px solid #00ffff;
+            background: linear-gradient(135deg, rgba(0, 0, 0, 0.9), rgba(10, 10, 30, 0.9));
+            text-align: left;
+            box-shadow: 0px 0px 10px #00ffff;
+        }
+        .progress-bar {
+            width: 100%;
+            height: 20px;
+            border: 2px solid #ff00ff;
+            position: relative;
+            margin-top: 10px;
+            background-color: rgba(255, 0, 255, 0.2);
+        }
+        .progress {
+            height: 100%;
+            background: linear-gradient(90deg, #ff00ff, #00ffff);
+            width: 0%;
+            transition: width 0.1s linear;
+        }
+        p {
+            text-shadow: 0px 0px 5px #00ff41;
+        }
+    </style>
+</head>
+<body>
+    <div class="terminal">
+        <p>> Booting up system...</p>
+        <p>> Establishing neural link... <span id="progress-text">0%</span></p>
+        <div class="progress-bar">
+            <div class="progress" id="progress-bar"></div>
+        </div>
+        <p id="error-msg" style="display: none; color: #ff0000; text-shadow: 0px 0px 10px #ff0000;">> ERROR: Identity corruption detected.</p>
+        <p id="final-msg" style="display: none; color: #00ffff; text-shadow: 0px 0px 10px #00ffff;">> WELCOME TO THE GRID, UNKNOWN ENTITY.</p>
+    </div>
+    
+    <script>
+        function updateProgress() {
+            let progress = 0;
+            let progressBar = document.getElementById("progress-bar");
+            let progressText = document.getElementById("progress-text");
+            let errorMsg = document.getElementById("error-msg");
+            let finalMsg = document.getElementById("final-msg");
+            
+            errorMsg.style.display = "none";
+            finalMsg.style.display = "none";
+            
+            function getRandomInterval() {
+                return Math.random() * 400 + 100; // Random delay between 100ms - 500ms
+            }
+            
+            function progressUpdate() {
+                if (progress >= 100) {
+                    clearInterval(interval);
+                    setTimeout(() => {
+                        errorMsg.style.display = "block";
+                        setTimeout(() => {
+                            finalMsg.style.display = "block";
+                        }, 2000);
+                    }, 1000);
+                    setTimeout(updateProgress, 5000); // Restart after 5 sec
+                } else {
+                    progress += Math.floor(Math.random() * 15) + 1; // Random increments between 1 and 15
+                    if (progress > 100) progress = 100;
+                    progressBar.style.width = progress + "%";
+                    progressText.innerText = progress + "%";
+                    setTimeout(progressUpdate, getRandomInterval());
+                }
+            }
+            
+            let interval = setTimeout(progressUpdate, getRandomInterval());
+        }
+        
+        updateProgress();
+    </script>
+</body>
+</html>
